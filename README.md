@@ -178,61 +178,52 @@
 
 ## 🏗 Architecture
 
-```
-┌───────────────────────────────────────────────────────────────────┐
-│                        DataNautX Platform                        │
-├───────────────────────────────────────────────────────────────────┤
-│                                                                   │
-│   ┌─────────────┐    ┌─────────────┐    ┌──────────────────┐     │
-│   │   Django     │    │   Celery     │    │   Celery Beat    │     │
-│   │   Web App    │◄──►│   Workers    │◄──►│   (Scheduler)    │     │
-│   │   (Gunicorn) │    │             │    │                  │     │
-│   └──────┬──────┘    └──────┬──────┘    └──────────────────┘     │
-│          │                  │                                     │
-│          ▼                  ▼                                     │
-│   ┌─────────────┐    ┌─────────────┐                             │
-│   │  PostgreSQL  │    │    Redis    │                             │
-│   │  (Database)  │    │   (Broker)  │                             │
-│   └─────────────┘    └─────────────┘                             │
-│                                                                   │
-│   ┌───────────────────────────────────────────────────────────┐  │
-│   │              Core Extraction Engine                        │  │
-│   │                                                           │  │
-│   │  ┌────────────────┐  ┌──────────────┐  ┌──────────────┐  │  │
-│   │  │ Profile Data   │  │ Post Link    │  │  Keyword     │  │  │
-│   │  │ Extraction     │  │ Extraction   │  │  Extraction  │  │  │
-│   │  │ (FB,IG,YT,X)  │  │ (URL→Metrics)│  │  (Hashtag)   │  │  │
-│   │  └────────────────┘  └──────────────┘  └──────────────┘  │  │
-│   │                                                           │  │
-│   │  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌───────────┐  │  │
-│   │  │  FB  │  │  IG  │  │  YT  │  │  X   │  │  News API │  │  │
-│   │  └──┬───┘  └──┬───┘  └──┬───┘  └──┬───┘  └─────┬─────┘  │  │
-│   │     └─────────┴────────┴─────────┴──────────────┘         │  │
-│   └───────────────────────────┬───────────────────────────────┘  │
-│                               │                                   │
-│                               ▼                                   │
-│   ┌───────────────────────────────────────────────────────────┐  │
-│   │                   Google Cloud Platform                    │  │
-│   │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐ │  │
-│   │  │ BigQuery  │  │   GCS    │  │  Secret  │  │  Sheets  │ │  │
-│   │  │ (DWH)    │  │ (Files)  │  │  Manager │  │  (I/O)   │ │  │
-│   │  └──────────┘  └──────────┘  └──────────┘  └──────────┘ │  │
-│   └───────────────────────────────────────────────────────────┘  │
-│                                                                   │
-│   ┌───────────────────────────────────────────────────────────┐  │
-│   │              AI / Analytics Layer                          │  │
-│   │                                                           │  │
-│   │  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐  │  │
-│   │  │ Gemini 2.5   │  │  Sentiment   │  │  Narrative     │  │  │
-│   │  │ Flash (LLM)  │  │  Analysis    │  │  Framing       │  │  │
-│   │  └──────────────┘  └──────────────┘  └────────────────┘  │  │
-│   │                                                           │  │
-│   │  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐  │  │
-│   │  │  Rhetorical  │  │  Daily       │  │  Top Profiles  │  │  │
-│   │  │  Devices     │  │  Trends      │  │  & Top Posts   │  │  │
-│   │  └──────────────┘  └──────────────┘  └────────────────┘  │  │
-│   └───────────────────────────────────────────────────────────┘  │
-└───────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph WEB["🌐 Web Layer"]
+        DJ["Django Web App\n(Gunicorn)"]
+    end
+
+    subgraph QUEUE["⚡ Task Queue"]
+        CW["Celery Workers"]
+        CB["Celery Beat\n(Scheduler)"]
+    end
+
+    subgraph STORAGE["💾 Data Stores"]
+        PG[(PostgreSQL)]
+        RD[(Redis\nBroker)]
+    end
+
+    subgraph ENGINE["🔄 Core Extraction Engine"]
+        PE["Profile Data\nExtraction\n(FB, IG, YT, X)"]
+        PL["Post Link\nExtraction\n(URL → Metrics)"]
+        KE["Keyword\nExtraction\n(Hashtag)"]
+        FB["Facebook"] & IG["Instagram"] & YT["YouTube"] & XX["X / Twitter"] & NA["News API"]
+    end
+
+    subgraph GCP["☁️ Google Cloud Platform"]
+        BQ["BigQuery\n(DWH)"]
+        GCS["GCS\n(Files)"]
+        SM["Secret\nManager"]
+        SH["Sheets\n(I/O)"]
+    end
+
+    subgraph AI["🤖 AI / Analytics Layer"]
+        GM["Gemini 2.5\nFlash (LLM)"]
+        SA["Sentiment\nAnalysis"]
+        NF["Narrative\nFraming"]
+        RH["Rhetorical\nDevices"]
+        DT["Daily\nTrends"]
+        TP["Top Profiles\n& Top Posts"]
+    end
+
+    DJ <--> CW <--> CB
+    DJ --> PG
+    CW --> RD
+    CW --> PE & PL & KE
+    PE & PL & KE --> FB & IG & YT & XX & NA
+    FB & IG & YT & XX & NA --> BQ & GCS & SM & SH
+    BQ --> GM & SA & NF & RH & DT & TP
 ```
 
 ---
