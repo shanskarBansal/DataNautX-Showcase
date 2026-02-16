@@ -4,6 +4,7 @@
   <img src="https://img.shields.io/badge/Celery-5.x-37814A?style=for-the-badge&logo=celery&logoColor=white" />
   <img src="https://img.shields.io/badge/BigQuery-GCP-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white" />
   <img src="https://img.shields.io/badge/Redis-Queue-DC382D?style=for-the-badge&logo=redis&logoColor=white" />
+  <img src="https://img.shields.io/badge/Gemini_2.5-AI-8E75B2?style=for-the-badge&logo=google&logoColor=white" />
   <img src="https://img.shields.io/badge/Railway-Deployed-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" />
   <img src="https://img.shields.io/badge/Source-Private-red?style=for-the-badge&logo=github&logoColor=white" />
 </p>
@@ -16,17 +17,16 @@
 </p>
 
 <p align="center">
+  <a href="#-screenshots">Screenshots</a> •
   <a href="#-key-features">Features</a> •
   <a href="#-architecture">Architecture</a> •
   <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-getting-started">Getting Started</a> •
-  <a href="#-deployment">Deployment</a> •
   <a href="#-license">License</a>
 </p>
 
 ---
 
-> ⚠️ **Note:** This is the **public showcase** repository. The source code is maintained in a private repository. For access or collaboration inquiries, please reach out directly.
+> ⚠️ **Note:** This is the **public showcase** repository. The source code is maintained in a private repository. For access or collaboration inquiries, please reach out via [GitHub](https://github.com/shanskarBansal).
 
 ---
 
@@ -38,9 +38,62 @@
 
 ---
 
+## 📸 Screenshots
+
+### 🏠 Dashboard Home
+> Project management with real-time activity feed, extraction stats, AI queries count, and quick actions
+
+<p align="center">
+  <img src="screenshots/01_dashboard_home.png" alt="Dashboard Home" width="100%" style="border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+</p>
+
+### ⚡ Extraction Workspace — Profile Data & Post Link Extraction
+> Dual-mode extraction: **Profile Data Extraction** (Google Sheet / Manual grid) and **Post Link Extraction** with Handsontable spreadsheet editor, platform toggles (FB, IG, YT, X), date range selection, and real-time progress logs
+
+<p align="center">
+  <img src="screenshots/02_extraction_workspace.png" alt="Extraction Workspace" width="100%" style="border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+</p>
+
+### 🔍 Keyword Extraction
+> Hashtag-based extraction across all platforms — choose Google Sheet or manual hashtag entry, set per-platform post limits (10/25/50/100), configure date ranges, and enable LLM analysis in one click. Re-run analysis on previous extractions without re-extracting data.
+
+<p align="center">
+  <img src="screenshots/03_keyword_extraction.png" alt="Keyword Extraction" width="100%" style="border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+</p>
+
+### 📊 Keyword Analysis Report
+> Deep-dive analytics with sentiment analysis, narrative framing, rhetorical device detection, daily trends, top profiles, and top posts — all generated via Gemini 2.5 Flash LLM + statistical analysis pipeline. Exportable as interactive HTML report or PDF.
+
+<p align="center">
+  <img src="screenshots/04_keyword_analysis.png" alt="Keyword Analysis" width="100%" style="border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+</p>
+
+### 📈 Summary Studio
+> Aggregate platform data for specific date ranges, generate summary tabs with engagement buckets (0k-1k through 100M+), and export directly to Google Sheets
+
+<p align="center">
+  <img src="screenshots/05_summary_studio.png" alt="Summary Studio" width="100%" style="border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+</p>
+
+### 📄 Report Generator
+> Professional PDF reports with performance matrices, platform summaries, top posts with thumbnails, and executive notes — from CSV runs or Google Sheets data
+
+<p align="center">
+  <img src="screenshots/06_reporting.png" alt="Report Generator" width="100%" style="border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+</p>
+
+### 🤖 AI Assistant
+> Natural language queries powered by Gemini 2.5 Flash — ask questions about your data in plain English, auto-generates BigQuery SQL, renders charts, and compares creators across platforms
+
+<p align="center">
+  <img src="screenshots/07_ai_assistant.png" alt="AI Assistant" width="100%" style="border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);" />
+</p>
+
+---
+
 ## ✨ Key Features
 
-### 🔄 Multi-Platform Data Extraction
+### 🔄 Profile Data Extraction
 | Platform | Capabilities |
 |----------|-------------|
 | **Facebook** | Posts, reels, video content, engagement metrics, follower data |
@@ -48,10 +101,41 @@
 | **YouTube** | Videos, shorts, channel stats, views/likes/comments/subscribers |
 | **X (Twitter)** | Tweets, engagement, impressions, follower counts |
 
-- Dual data sources: **Google Sheets** input or **manual data entry**
+- Dual data sources: **Google Sheets** input or **manual spreadsheet entry** (Handsontable grid)
 - Real-time progress monitoring with live extraction logs
 - Concurrent multi-platform extraction via thread pools
 - Automatic BigQuery synchronization & GCS file storage
+- Reel/video-specific enrichment pipeline (FB Reels, IG Reels)
+
+### 🔗 Post Link Extraction *(NEW)*
+- **Direct URL enrichment** — paste any post link (FB, IG, YT, X) to extract full metrics
+- Auto-detects platform from URL pattern
+- Enriches with: Likes, Shares, Comments, Engagement, Total Reach, Post Date, Caption, Page Name, Followers
+- Google Sheet or manual grid input with Handsontable editor
+- Concurrent per-platform processing via ThreadPoolExecutor
+- Output to Google Sheets + XLSX download
+
+### 🔍 Keyword Extraction & Analysis *(NEW)*
+- **Hashtag-based search** across Facebook, Instagram, YouTube & X simultaneously
+- **Per-platform post limits** — configure 10, 25, 50, or 100 posts per platform per hashtag
+- **Multi-hashtag support** — extract for multiple hashtags in parallel
+- Google Sheet or manual hashtag grid input
+- **LLM Analysis** (Gemini 2.5 Flash):
+  - Sentiment classification (positive / negative / neutral) with confidence scores
+  - Narrative framing detection (top 9 narrative frames + "Others")
+  - Rhetorical device identification
+  - Narrative strength scoring per topic
+- **Data Analytics Pipeline**:
+  - Topic overview (overall + per-platform)
+  - Hashtag usage patterns (by platform & topic)
+  - Risk factor indexing (topic × sentiment)
+  - Sentiment distribution visualization
+  - Daily engagement trends
+  - Top profiles (overall + per-platform)
+  - Top posts (by topic × sentiment × platform)
+- **Re-run analysis** on previous extraction runs without re-extracting data
+- **XLSX export** — download complete analysis workbook with all analytics sheets
+- **Interactive HTML report** — keyword analysis rendered as a full-page interactive report
 
 ### 🤖 AI-Powered Assistant (Gemini 2.5 Flash)
 - **Natural language queries** — ask questions in plain English about your extracted data
@@ -60,25 +144,24 @@
 - **Visual charts** — request bar, pie, or line charts on-the-fly
 - **Cross-platform comparisons** — compare creators, channels, accounts across platforms
 
-### 📊 Keyword & Narrative Analysis
-- **Hashtag-based search** across all platforms simultaneously
-- **Sentiment analysis** — positive, negative, neutral classification
-- **Narrative framing** — rhetorical device detection & narrative strength scoring
-- **Daily trend tracking** — engagement patterns over time
-- **Top profiles & top posts** — identify key influencers and viral content
-- **PDF export** — professional keyword analysis reports
-
 ### 📈 Reporting Suite
 - **Automated PDF generation** with performance matrices, top posts, and executive summaries
 - **Google Sheets integration** — read input, write output, and generate reports directly
 - **CSV-based reports** from extraction runs
 - **Report history** — access all previously generated reports with clean filenames
 
+### 📊 Summary Studio
+- **Aggregated summaries** — platform-wise summary reports with engagement buckets
+- **Date range filtering** — analyze data for specific time periods
+- **View count bucketing** — 16 granular buckets from 0k-1k to 100M+
+- **Google Sheets output** — export summaries directly
+
 ### 🎨 Modern Web Dashboard
-- **Glassmorphic design** — beautiful, modern UI with glassmorphism effects
-- **Dark theme** with gradient accents for comfortable extended use
+- **Glassmorphic design** — beautiful, modern UI with glassmorphism effects and holo-cards
+- **Dark theme** with gradient accents and radial glow effects
 - **Responsive design** — works seamlessly on desktop & mobile
-- **Smooth animations** — letter-drop effects, counting animations, hover interactions
+- **Smooth animations** — letter-drop effects, count-up animations, GSAP transitions, tilt effects
+- **Handsontable grid** — spreadsheet-like manual data entry with context menus
 - **Real-time updates** — live extraction progress & status monitoring
 
 ### 🏢 Enterprise Features
@@ -86,8 +169,10 @@
 - **Google OAuth** — secure login with domain-restricted access
 - **Celery + Redis** — distributed task queue for background processing
 - **Ticket management** — internal issue tracking and collaboration
-- **Scheduled extractions** — cron-based automated data collection
+- **Scheduled extractions** — cron-based automated data collection (via django-celery-beat)
 - **Worker health monitoring** — real-time Celery worker status dashboard
+- **Google Drive integration** — auto-create Drive sheets for extraction runs
+- **Activity history** — full timeline of extractions, AI queries, and reports
 
 ---
 
@@ -112,6 +197,13 @@
 │                                                                   │
 │   ┌───────────────────────────────────────────────────────────┐  │
 │   │              Core Extraction Engine                        │  │
+│   │                                                           │  │
+│   │  ┌────────────────┐  ┌──────────────┐  ┌──────────────┐  │  │
+│   │  │ Profile Data   │  │ Post Link    │  │  Keyword     │  │  │
+│   │  │ Extraction     │  │ Extraction   │  │  Extraction  │  │  │
+│   │  │ (FB,IG,YT,X)  │  │ (URL→Metrics)│  │  (Hashtag)   │  │  │
+│   │  └────────────────┘  └──────────────┘  └──────────────┘  │  │
+│   │                                                           │  │
 │   │  ┌──────┐  ┌──────┐  ┌──────┐  ┌──────┐  ┌───────────┐  │  │
 │   │  │  FB  │  │  IG  │  │  YT  │  │  X   │  │  News API │  │  │
 │   │  └──┬───┘  └──┬───┘  └──┬───┘  └──┬───┘  └─────┬─────┘  │  │
@@ -128,10 +220,16 @@
 │   └───────────────────────────────────────────────────────────┘  │
 │                                                                   │
 │   ┌───────────────────────────────────────────────────────────┐  │
-│   │                    AI / Analytics Layer                    │  │
+│   │              AI / Analytics Layer                          │  │
+│   │                                                           │  │
 │   │  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐  │  │
 │   │  │ Gemini 2.5   │  │  Sentiment   │  │  Narrative     │  │  │
 │   │  │ Flash (LLM)  │  │  Analysis    │  │  Framing       │  │  │
+│   │  └──────────────┘  └──────────────┘  └────────────────┘  │  │
+│   │                                                           │  │
+│   │  ┌──────────────┐  ┌──────────────┐  ┌────────────────┐  │  │
+│   │  │  Rhetorical  │  │  Daily       │  │  Top Profiles  │  │  │
+│   │  │  Devices     │  │  Trends      │  │  & Top Posts   │  │  │
 │   │  └──────────────┘  └──────────────┘  └────────────────┘  │  │
 │   └───────────────────────────────────────────────────────────┘  │
 └───────────────────────────────────────────────────────────────────┘
@@ -143,8 +241,9 @@
 
 | Layer | Technologies |
 |-------|-------------|
-| **Frontend** | Django Templates, HTML5, CSS3 (Glassmorphism), JavaScript |
+| **Frontend** | Django Templates, HTML5, CSS3 (Glassmorphism), JavaScript, GSAP, Three.js |
 | **Backend** | Python 3.10+, Django 5.2, Gunicorn |
+| **Spreadsheet UI** | Handsontable (Excel-like grid editor in browser) |
 | **Task Queue** | Celery 5.x, Redis, django-celery-beat |
 | **Database** | PostgreSQL (prod), SQLite (dev) |
 | **Data Warehouse** | Google BigQuery |
@@ -155,105 +254,6 @@
 | **Scraping** | BrightData, Apify, Supermetrics, BeautifulSoup4 |
 | **Deployment** | Railway (Procfile-based), Gunicorn |
 | **Auth** | Google OAuth 2.0, Django Auth |
-
----
-
-## 📁 Project Structure
-
-```
-DataNautX/
-├── main.py                     # Main extraction pipeline orchestrator
-├── summary.py                  # Summary generation engine
-├── requirements.txt            # Python dependencies
-├── Procfile                    # Railway deployment configuration
-├── LICENSE                     # MIT License
-│
-├── components/                 # Core extraction & integration modules
-│   ├── fb_ig.py               # Facebook & Instagram extraction
-│   ├── fb_reels.py            # Facebook Reels processing
-│   ├── fb_video_reel.py       # Facebook Video/Reel data
-│   ├── ig_reel.py             # Instagram Reels processing
-│   ├── youtube.py             # YouTube extraction
-│   ├── twitter.py             # X (Twitter) extraction
-│   ├── news_fetcher.py        # News article fetcher
-│   ├── bigquery_sink.py       # BigQuery data publisher
-│   ├── google_api.py          # Google Sheets API integration
-│   ├── project_store.py       # Project management & GCS storage
-│   ├── secret_manager.py      # Google Secret Manager client
-│   ├── redirect_url.py        # URL redirect resolver
-│   ├── brightdata.py          # BrightData scraping integration
-│   └── post_link_extraction/  # Post link extraction pipeline
-│       ├── pipeline.py        # Extraction pipeline orchestrator
-│       ├── processor.py       # Data processing logic
-│       ├── utils.py           # Utility functions
-│       └── sources/           # Platform-specific extractors
-│           ├── fb.py, ig.py, x.py, yt.py
-│
-├── post-search/               # Keyword & narrative analysis module
-│   ├── main.py                # Post search pipeline
-│   ├── params.yaml            # Search configuration
-│   └── src/
-│       ├── data_analysis.py   # Statistical analysis
-│       ├── llm_analysis.py    # LLM-powered insights
-│       ├── scarpe_component.py# Scraping components
-│       └── pipeline/          # Analysis pipeline
-│           └── cal/           # Calculation modules
-│               ├── sentiment_analysis.py
-│               ├── narrative_frame.py
-│               ├── narrative_strength.py
-│               ├── daily_trends.py
-│               ├── top_posts.py
-│               ├── top_profiles.py
-│               └── ...
-│
-├── webui/                     # Django web application
-│   ├── manage.py              # Django management CLI
-│   ├── webui/                 # Django project settings
-│   │   ├── settings.py        # Application configuration
-│   │   ├── celery.py          # Celery task queue config
-│   │   ├── urls.py            # URL routing
-│   │   └── wsgi.py / asgi.py  # WSGI/ASGI entry points
-│   └── dashboard/             # Main dashboard app
-│       ├── models.py          # Database models
-│       ├── views.py           # View handlers (7,700+ lines)
-│       ├── chatbot.py         # AI Assistant logic
-│       ├── tasks.py           # Celery background tasks
-│       ├── services.py        # Business logic services
-│       ├── schedulers.py      # Scheduled extraction jobs
-│       ├── forms.py           # Django forms
-│       ├── urls.py            # App URL routing
-│       ├── templates/         # 28 HTML templates
-│       ├── management/        # Custom management commands
-│       └── migrations/        # Database migrations
-│
-├── scripts/                   # Deployment & operational scripts
-│   ├── release.sh             # Railway release (migrations)
-│   ├── start_worker.sh        # Celery worker start
-│   ├── start_beat.sh          # Celery beat scheduler start
-│   ├── start_worker_local.sh  # Local development worker
-│   └── start_beat_local.sh    # Local development beat
-│
-└── Link Extraction/           # Legacy link extraction module
-    ├── main.py
-    └── components/
-```
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Python 3.10+**
-- **Google Cloud Platform** account with:
-  - Secret Manager API enabled
-  - BigQuery API (optional, for AI Assistant & data warehouse)
-  - Cloud Storage API (optional, for file storage)
-  - Service account JSON with appropriate permissions
-- **Redis** (for Celery task queue)
-- **PostgreSQL** (recommended for production; SQLite works for development)
-
-> 🔒 **Source code is private.** For access, collaboration, or demo requests, please contact the maintainer via [GitHub](https://github.com/shanskarBansal).
 
 ---
 
@@ -289,6 +289,10 @@ When BigQuery is enabled, extracted data is automatically pushed:
 - **Environment** — Sensitive config via shell exports; `.gitignore` blocks all secret files
 - **Database** — PostgreSQL with connection pooling in production
 - **HTTPS** — SSL enforced in production deployments
+
+---
+
+> 🔒 **Source code is private.** For access, collaboration, or demo requests, please contact the maintainer via [GitHub](https://github.com/shanskarBansal).
 
 ---
 
